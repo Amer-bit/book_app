@@ -20,6 +20,11 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/hello', (req, res) => {
     res.render('pages/index')
 })
+app.get('/search', (req, res) => {
+    console.log('hey');
+    
+    res.render( 'pages/searches/show')
+})
 
 
 
