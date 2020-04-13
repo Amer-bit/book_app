@@ -9,7 +9,25 @@
 </head>
 <body>
     <header>
-        <h1>Hello World</h1>
-    </header>    
+        <h1>Best Books</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/add">Book Search</a></li>
+            </ul>
+        </nav>
+    </header>   
+    <main>
+        <section>
+            <% sqldata.forEach(value => { %>
+                <ul>
+                    <li><img src="<%= value.img_url %>"></li>
+                    <li><p> <%= value.title %> </p></li>
+                    <li> <p><%= value.author %> </p></li>
+                    <li><a href="">View Details</a></li>
+                </ul>
+           <% }) %> 
+        </section>
+    </main> 
 </body>
 </html>

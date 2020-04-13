@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS goBooks;
-CREATE TABLE goBooks(
+DROP TABLE IF EXISTS gobooks;
+CREATE TABLE gobooks(
     id SERIAL PRIMARY KEY,
-    author VARCHAR(255),
-    title VARCHAR(255),
-    isbn NUMERIC,
     img_url VARCHAR(255),
-    description VARCHAR(255),
-    bookshlef VARCHAR(255)
+    title VARCHAR(255),
+    author VARCHAR(255),
+    description TEXT
+    -- isbn NUMERIC,
+    -- bookshlef VARCHAR(255)
 )
