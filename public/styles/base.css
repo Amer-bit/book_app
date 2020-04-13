@@ -1,13 +1,56 @@
 html{
-    background-color: greenyellow;
+    background-color: white;
 }
-
 body{
-    background-color: hotpink;
+    width: 500px;
+    margin: auto;
+    background-color: #9B9B9B;
+}
+header{
+    background-color: black;
+    height: 13vh;
+}
+p{
+    color: darkblue;
+    margin: 10px 0;
+}
+section a{
+    margin: 20px 0;
+    border: black solid;
+    padding: 15px;
+    color: white;
+    background-color: black;
+    text-decoration: none;
+}
+header a {
+    color: white;
+    text-decoration: none;
 }
 
 h1{
-    color: indigo;
+    color: white;
     font-size: larger;
 }
+img{
+    width: 75vw ;
+    height: 50vh;
+    margin: 70px 0;
+}
+/* section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    
+} */
+main section div{
+    display: flex;
+    margin: 18px 30px;
+    flex-direction: column;
+    align-items: center;
+    background-color: #D8D8D8;
+    box-shadow: 1px 1px rgb(185, 179, 179);
+}
+
+
 
