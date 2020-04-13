@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book App</title>
+  </head>
+  <body>
+    <header>
+        <%- include('../../layout/header') %>
+    </header>
+    <main>
+      <section>
+        <img src="<%= partbook.img_url %>" />
+        <p><%= partbook.title %></p>
+        <p><%= partbook.author %></p>
+        <p><%= partbook.description %> </p>
+      </section>
+    </main>
+  </body>
+</html>

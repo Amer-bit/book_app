@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book App</title>
-    <link rel="stylesheet" href="/styles/reset.css">
-    <link rel="stylesheet" href="/styles/base.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/base.css" />
+  </head>
+  <body>
     <header>
-        <h1>Best Books</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/add">Book Search</a></li>
-            </ul>
-        </nav>
-    </header>   
+        <%- include('../layout/header') %> 
+      <p> No of Books <%= sqldata.length %> </p>
+    </header>
     <main>
-        <section>
-            <% sqldata.forEach(value => { %>
-                <ul>
-                    <li><img src="<%= value.img_url %>"></li>
-                    <li><p> <%= value.title %> </p></li>
-                    <li> <p><%= value.author %> </p></li>
-                    <li><a href="">View Details</a></li>
-                </ul>
-           <% }) %> 
-        </section>
-    </main> 
-</body>
+      <section>
+        <% sqldata.forEach(value => { %>
+        <div>
+          <img src="<%= value.img_url %>" />
+          <p><%= value.title %></p>
+          <p><%= value.author %></p>
+          <a href="/books/<%= value.id %> ">View Details</a>
+        </div>
+        <% }) %>
+      </section>
+    </main>
+  </body>
 </html>
