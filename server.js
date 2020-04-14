@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 ///////////////////////////// Routes Definition and routes handlers \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 app.get("/", getBooks);
-app.get( "/add", (req, res) => {res.render("pages/searches/new");} );
+app.get("/add", (req, res) => { res.render("pages/searches/new"); });
 app.post("/searches", searchHandler);
 app.post("/books", collection);
 app.get("/books/:bookid", specificBook);
@@ -45,7 +45,7 @@ function searchHandler(req, res) {
   ////// or we can use one URL that take two values`https://www.googleapis.com/books/v1/volumes?q=in${searchType}:${userInput}`
   superagent.get(url).then((googleBooksData) => {
     const googleLibrary = googleBooksData.body.items;
-    // console.log(googleLibrary[0]);
+    // console.log(googleLibrary[0].volumeInfo.categories);
 
     let googleBooks = googleLibrary.map((value) => {
       let creatingBookIns = new Book(userInput, value);
@@ -69,17 +69,25 @@ function specificBook(req, res) {
   client.query(SQL, safeValues).then((data) => {
     // console.log(data.rows);
     res.render("pages/books/detail", { partbook: data.rows[0] });
+    console.log('hiiiiiiiiiiiiiiiii');
+    
+    const SQL2 = 'SELECT DISTINCT bookshelf FROM gobooks'
+    client.query(SQL2)
+    .then(data => {
+    //  res.render("pages/books/detail", { typebook: data.rows })
+      
+    })
   });
   // console.log(req.params);
 }
 
 function collection(req, res) {
   let addBook = req.body.add;
-  console.log(req.body.add);
+  // console.log(req.body.add);
 
   const SQL =
-    "INSERT INTO gobooks(img_url, title, author, description,isbn) VALUES ($1,$2,$3,$4,$5) RETURNING *;";
-  let safeValues = [addBook[0], addBook[1], addBook[2], addBook[3], addBook[4]];
+    "INSERT INTO gobooks(img_url, title, author, description, isbn, bookshelf) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;";
+  let safeValues = [addBook[0], addBook[1], addBook[2], addBook[3], addBook[4], addBook[5]];
   ////////////// OR we can use object deconstructing like {img, author, title, overview} = creatingBookIns
   ///////////// they must be the same name as the properties we can accsess the properties without obj.propertiy
   client.query(SQL, safeValues).then(() => {
@@ -87,40 +95,34 @@ function collection(req, res) {
   });
 }
 
-function bookUpdate(req, res){
+function bookUpdate(req, res) {
   console.log();
-  
+
 }
 
 
-function bookDel(req, res){  
+function bookDel(req, res) {
   let deleteBook = req.params.bookid;
   const SQL = 'DELETE FROM gobooks WHERE id=$1'
   let safeValues = [deleteBook];
   client.query(SQL, safeValues)
-  .then( data => {
-    res.redirect('/');
-  })
-  .catch(error =>{
-    errorHandler(req, res, error)
-  })
+    .then(data => {
+      res.redirect('/');
+    })
+    .catch(error => {
+      errorHandler(req, res, error)
+    })
 }
 
 ////////////////////////////// Constructor \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 function Book(userInput, googleApiRes) {
-  this.img =
-    (googleApiRes.volumeInfo.imageLinks &&
-      googleApiRes.volumeInfo.imageLinks.thumbnail) ||
-    `https://via.placeholder.com/250x300/000000`;
-  this.title =
-    (googleApiRes.volumeInfo && googleApiRes.volumeInfo.title) || userInput;
-  this.author = googleApiRes.volumeInfo.authors || userInput;
+  this.img = (true && googleApiRes.volumeInfo.imageLinks.thumbnail) || `https://via.placeholder.com/250x300/000000`;
+  this.title = (true && googleApiRes.volumeInfo.title) || userInput;
+  this.author = (true && googleApiRes.volumeInfo.authors) || userInput;
   this.overview = googleApiRes.volumeInfo.description;
-  this.isbn =
-    (googleApiRes.volumeInfo.industryIdentifiers &&
-      googleApiRes.volumeInfo.industryIdentifiers[0].identifier) ||
-    "";
+  this.isbn =(true && googleApiRes.volumeInfo.industryIdentifiers[0].identifier) || "Not FOUND!!";
+  this.bookShelf = (googleApiRes.volumeInfo.categories && googleApiRes.volumeInfo.categories[0]) || 'Not FOUND!!'
 }
 
 function errorHandler(req, res, error) {

@@ -5,6 +5,6 @@ CREATE TABLE gobooks(
     title VARCHAR(255),
     author VARCHAR(255),
     description TEXT,
-    isbn NUMERIC
-    -- bookshlef VARCHAR(255)
+    isbn VARCHAR,
+    bookshelf VARCHAR(255)
 )
