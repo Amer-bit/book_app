@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book App</title>
+    <%- include('../../layout/head') %> 
 </head>
 <body>
     <header>
@@ -23,7 +21,8 @@
                       <input type="hidden" name="add" value="<%= value.title %>">
                       <input type="hidden" name="add" value="<%= value.author %>">
                       <input type="hidden" name="add" value="<%= value.overview %>">
-                      <button type="submit">Add to Your Collection</button>
+                      <input type="hidden" name="add" value="<%= value.isbn %>">
+                      <button type="submit">Add to My Collection</button>
                   </form>
               </li>  
           <%})%> 

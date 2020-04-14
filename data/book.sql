@@ -4,7 +4,7 @@ CREATE TABLE gobooks(
     img_url VARCHAR(255),
     title VARCHAR(255),
     author VARCHAR(255),
-    description TEXT
-    -- isbn NUMERIC,
+    description TEXT,
+    isbn NUMERIC
     -- bookshlef VARCHAR(255)
 )

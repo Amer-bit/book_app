@@ -32,8 +32,8 @@ h1{
     font-size: larger;
 }
 img{
-    width: 75vw ;
-    height: 50vh;
+    width: 250px ;
+    height: 300px;
     margin: 70px 0;
 }
 /* section{
@@ -50,6 +50,11 @@ main section div{
     align-items: center;
     background-color: #D8D8D8;
     box-shadow: 1px 1px rgb(185, 179, 179);
+}
+button{
+    color: white;
+    background-color: black;
+
 }
 
 

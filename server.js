@@ -5,34 +5,35 @@ const express = require("express");
 const pg = require("pg");
 const cors = require("cors");
 const superagent = require("superagent");
+const methodoverride = require('method-override')
 const PORT = process.env.PORT || 4000;
 
 ///////////////////////////// Initializing the Server////////////////////////////
 const app = express();
 const client = new pg.Client(process.env.DATABASE_URL);
 
-///////////////////////////////
+///////////////////////////////////////// Middlewares \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 app.use(cors());
 app.set("view engine", "ejs");
+app.use(methodoverride('_method'));
 app.use(express.static("./public"));
 app.use(express.urlencoded({ extended: true }));
 
 ///////////////////////////// Routes Definition and routes handlers \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 app.get("/", getBooks);
-app.get("/add", (req, res) => {
-  res.render("pages/searches/new");
-});
-
+app.get( "/add", (req, res) => {res.render("pages/searches/new");} );
 app.post("/searches", searchHandler);
-
-app.get("/books/:bookid", specificBook);
-
 app.post("/books", collection);
+app.get("/books/:bookid", specificBook);
+app.put('/books/:bookid', bookUpdate);
+app.delete('/books/:bookid', bookDel);
 
-//////////////////////////////////////// Route Handler \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+// app.use('*', notFoundHandler)
 
-function searchHandler (req, res) {
+///////////////////////////////////////////////// Route Handler \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+function searchHandler(req, res) {
   let url;
   const userInput = req.body.bookSearch;
   const searchType = req.body.searchType;
@@ -44,6 +45,7 @@ function searchHandler (req, res) {
   ////// or we can use one URL that take two values`https://www.googleapis.com/books/v1/volumes?q=in${searchType}:${userInput}`
   superagent.get(url).then((googleBooksData) => {
     const googleLibrary = googleBooksData.body.items;
+    // console.log(googleLibrary[0]);
 
     let googleBooks = googleLibrary.map((value) => {
       let creatingBookIns = new Book(userInput, value);
@@ -53,16 +55,13 @@ function searchHandler (req, res) {
   });
 }
 
-
 function getBooks(req, res) {
   const SQL = "SELECT * FROM goBooks; ";
   client.query(SQL).then((data) => {
     // console.log(data);
-
     res.render("pages/index", { sqldata: data.rows });
   });
 }
-
 
 function specificBook(req, res) {
   const SQL = "SELECT * FROM gobooks WHERE id=$1;";
@@ -74,17 +73,37 @@ function specificBook(req, res) {
   // console.log(req.params);
 }
 
-
 function collection(req, res) {
   let addBook = req.body.add;
+  console.log(req.body.add);
+
   const SQL =
-    "INSERT INTO gobooks(img_url, title, author, description) VALUES ($1,$2,$3,$4) RETURNING *;";
-  let safeValues = [addBook[0], addBook[1], addBook[2], addBook[3]];
+    "INSERT INTO gobooks(img_url, title, author, description,isbn) VALUES ($1,$2,$3,$4,$5) RETURNING *;";
+  let safeValues = [addBook[0], addBook[1], addBook[2], addBook[3], addBook[4]];
   ////////////// OR we can use object deconstructing like {img, author, title, overview} = creatingBookIns
   ///////////// they must be the same name as the properties we can accsess the properties without obj.propertiy
   client.query(SQL, safeValues).then(() => {
     res.status(200).redirect("/");
   });
+}
+
+function bookUpdate(req, res){
+  console.log();
+  
+}
+
+
+function bookDel(req, res){  
+  let deleteBook = req.params.bookid;
+  const SQL = 'DELETE FROM gobooks WHERE id=$1'
+  let safeValues = [deleteBook];
+  client.query(SQL, safeValues)
+  .then( data => {
+    res.redirect('/');
+  })
+  .catch(error =>{
+    errorHandler(req, res, error)
+  })
 }
 
 ////////////////////////////// Constructor \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -98,12 +117,17 @@ function Book(userInput, googleApiRes) {
     (googleApiRes.volumeInfo && googleApiRes.volumeInfo.title) || userInput;
   this.author = googleApiRes.volumeInfo.authors || userInput;
   this.overview = googleApiRes.volumeInfo.description;
-  // this.isbn;
-  // this.bookshelf;
+  this.isbn =
+    (googleApiRes.volumeInfo.industryIdentifiers &&
+      googleApiRes.volumeInfo.industryIdentifiers[0].identifier) ||
+    "";
 }
 
 function errorHandler(req, res, error) {
-  res.status(500).json(error);
+  res.render("pages/error", { fault: error });
+}
+function notFoundHandler(req, res) {
+  res.status(404).send("Page Not Found");
 }
 
 client
