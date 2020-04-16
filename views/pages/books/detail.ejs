@@ -1,76 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('../../layout/head') %>
-  </head>
-  <body>
-    <header>
-      <%- include('../../layout/header') %>
-    </header>
-    <main>
-      <section id="databasebook">
-        <img src="<%= partbook.img_url %>" />
-        <p><%= partbook.title %></p>
-        <p><%= partbook.author %></p>
-        <p><%= partbook.description %></p>
-        <p>ISBN: <%= partbook.isbn %></p>
-        <p>Bookshelf: <%= partbook.bookshelf %></p>
-      </section>
-      
-      <form action="/books/<%= partbook.id %>?_method=DELETE" method="POST">
-        <button type="submit" name="delete" value="delete">
-          Delete This Book
-        </button>
-      </form>
-      
-      <button type="submit" name="update" value="update" class="updatebooks">Update Book Content</button>
 
-        <form action="/books/<%= partbook.id %>?_metheod=PUT" method="POST" class="update">
-          
-          
-          <input
-          type="text"
-          name="title"
-            value="<%= partbook.title %>"
-            required
-            /><br />
-            <input
-            type="text"
-            name="author"
-            value="<%= partbook.author %>"
-            required
-            /><br />
-            <input
-            type="text"
-            name="isbn"
-            value="<%= partbook.isbn %>"
-            required
-          /><br />
-          <input
-          type="text"
-            name="img_url"
-            value="<%= partbook.img_url %>"
-            required
-          /><br />
-          <textarea
-            name="description"
-            cols="60"
-            rows="15"
-            placeholder="<%= partbook.description %>"
-            required
-            ></textarea
-            ><br />
-            
-          <input type="text" list="bookshelf" />
-          <datalist id="bookshelf">
-            <option></option></datalist
-            ><br />
-            <button type="submit" name="bookupdate" value="" id="newvalues">Update Book</button>
+<head>
+  <%- include('../../layout/head') %>
+</head>
 
-        </form>
-        
-    </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
-    <script src="/js/app.js"></script>
-  </body>
+<body>
+  <header>
+    <%- include('../../layout/header') %>
+  </header>
+  <main>
+    <section id="databasebook">
+      <img src="<%= partbook.img_url %>" />
+      <p><%= partbook.title %></p>
+      <p><%= partbook.author %></p>
+      <p><%= partbook.description %></p>
+      <p>ISBN: <%= partbook.isbn %></p>
+      <p>Bookshelf: <%= partbook.bookshelf %></p>
+    </section>
+
+    <form action="/books/<%= partbook.id %>?_method=DELETE" method="POST">
+      <button type="submit" name="delete" value="delete">
+        Delete This Book
+      </button>
+    </form>
+
+    <button type="submit" name="update" value="update" class="updatebooks">Update Book Content</button>
+
+    <form action="/books/<%= partbook.id %>?_metheod=PUT" method="POST" class="update">
+
+
+      <input type="text" name="title" value="<%= partbook.title %>" required /><br />
+      <input type="text" name="author" value="<%= partbook.author %>" required /><br />
+      <input type="text" name="isbn" value="<%= partbook.isbn %>" required /><br />
+      <input type="text" name="img_url" value="<%= partbook.img_url %>" required /><br />
+      <textarea name="description" cols="60" rows="15" placeholder="<%= partbook.description %>"
+        required></textarea><br />
+
+      <input type="text" list="bookshelf" />
+      <datalist id="bookshelf">
+        <option></option>
+      </datalist><br />
+      <button type="submit" name="bookupdate" value="" id="newvalues">Update Book</button>
+
+    </form>
+
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+
 </html>
