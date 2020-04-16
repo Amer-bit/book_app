@@ -23,10 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", getBooks);
 app.get("/add", (req, res) => { res.render("pages/searches/new"); });
+app.put('/books/:bookid', bookUpdate);
 app.post("/searches", searchHandler);
 app.post("/books", collection);
 app.get("/books/:bookid", specificBook);
-app.put('/books/:bookid', bookUpdate);
 app.delete('/books/:bookid', bookDel);
 
 // app.use('*', notFoundHandler)
@@ -96,8 +96,15 @@ function collection(req, res) {
 }
 
 function bookUpdate(req, res) {
-  console.log();
-
+  const updateContent = req.body;
+  const SQL = 'UPDATE gobooks SET title = $1, author=$2, isbn=$3, img_url=$4, description=$5, bookshelf=$6 Where id=$7;';
+  const safeValues= Object.values(updateContent);
+  safeValues.push(req.params.bookid);
+  client.query(SQL, safeValues)
+  .then( data =>{
+    res.redirect(req.get('referer'));
+  })
+  
 }
 
 
@@ -117,7 +124,7 @@ function bookDel(req, res) {
 ////////////////////////////// Constructor \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 function Book(userInput, googleApiRes) {
-  this.img = (true && googleApiRes.volumeInfo.imageLinks.thumbnail) || `https://via.placeholder.com/250x300/000000`;
+  this.img = googleApiRes.volumeInfo.imageLinks?googleApiRes.volumeInfo.imageLinks.thumbnail : `https://via.placeholder.com/250x300/000000`;
   this.title = (true && googleApiRes.volumeInfo.title) || userInput;
   this.author = (true && googleApiRes.volumeInfo.authors) || userInput;
   this.overview = googleApiRes.volumeInfo.description;
