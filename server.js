@@ -97,9 +97,9 @@ function collection(req, res) {
 
 function bookUpdate(req, res) {
   const updateContent = req.body;
-  SQL = 'UPDATE gobooks SET title = $1, author=$2, isbn=$3, img_url=$4, decription=$5, bookshelf=$6 Where id=$7;';
-  safeValues= Object.values(updateContent);
-  safeValues.push(req.params);
+  const SQL = 'UPDATE gobooks SET title = $1, author=$2, isbn=$3, img_url=$4, description=$5, bookshelf=$6 Where id=$7;';
+  const safeValues= Object.values(updateContent);
+  safeValues.push(req.params.bookid);
   client.query(SQL, safeValues)
   .then( data =>{
     console.log(data);
