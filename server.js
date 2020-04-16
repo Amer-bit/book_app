@@ -102,8 +102,7 @@ function bookUpdate(req, res) {
   safeValues.push(req.params.bookid);
   client.query(SQL, safeValues)
   .then( data =>{
-    console.log(data);
-    
+    res.redirect(req.get('referer'));
   })
   
 }
@@ -125,7 +124,7 @@ function bookDel(req, res) {
 ////////////////////////////// Constructor \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 function Book(userInput, googleApiRes) {
-  this.img = (true && googleApiRes.volumeInfo.imageLinks.thumbnail) || `https://via.placeholder.com/250x300/000000`;
+  this.img = googleApiRes.volumeInfo.imageLinks?googleApiRes.volumeInfo.imageLinks.thumbnail : `https://via.placeholder.com/250x300/000000`;
   this.title = (true && googleApiRes.volumeInfo.title) || userInput;
   this.author = (true && googleApiRes.volumeInfo.authors) || userInput;
   this.overview = googleApiRes.volumeInfo.description;
